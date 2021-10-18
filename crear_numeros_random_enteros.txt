@@ -1,0 +1,5 @@
+import random
+
+random_number =[]
+for i in range:
+    random_numbers.append(random.randint(0,15))
