@@ -9,30 +9,28 @@ def create_client(client_name):
     global clients
 
     if client_name not in clients:
-        clients += client_name
-        _add_comma()
+        clients.append(client_name)
     else:
         print('Client already in client\'s list')
 
 
 def list_clients():
-    global clients
-    print(clients)
+    for idx, client in enumerate(clients):
+        print('{}: {}'.format(idx,client))
 
-def Update_client(client_name, Updated_client_name):
+def Update_client(client_name, updated_name):
     global clients
-
     if client_name in clients:
-        clients = clients.replace(client_name + ',', Updated_client_name+ ',')
+        index = clients.index(client_name)
+        clients[index] =  updated_name
     else:
         _not_exist()
 
+
 def delete_client(client_name):
     global clients
-    
     if client_name in clients:
-        clients = clients.replace(client_name+',','')
-        
+        clients.remove(client_name)
     else:
         _not_exist()
 
@@ -57,35 +55,12 @@ def _not_exist():
 
 def search_client(client_name):
     global clients
-    client_list= clients.split(',')
-
-    for client in client_list:
+    for client in clients:
         if client != client_name:
             continue
         else:
             return True
-     
 
-def _add_comma():
-    global clients
-
-    clients += ','
-"""
-def _get_client_name():
-    client_name = None
-
-    while not client_name:
-        client_name = input('What is the client name?')
-
-        if client_name == 'exit':
-            client_name = None
-            break
-
-    if not client_name:
-        sys.exit()
-
-    return client_name
-"""
 
 def _print_welcome():
     print('WELCOME TO PLATZI VENTAS')

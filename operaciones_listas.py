@@ -25,6 +25,10 @@ print(a)
 a.insert(1,9)
 print(a)
 
+
+#saber el primer indice de un elemento en lista
+print(a.index(9))
+
 #Eliminar ultimo elemento de la lista
 b.pop()
 print(b)
@@ -67,7 +71,7 @@ c =list(range(0,100,2))
 
 print(c)
 
-
+import random
 #Crear datos aleatorios en una lista
 random_number =[]
 for i in range(10):
