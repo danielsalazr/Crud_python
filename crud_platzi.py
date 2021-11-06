@@ -2,7 +2,20 @@ import sys
 
 
 #clients = 'pablo,ricardo,'
-clients = ['pablo','ricardo']
+clients = [
+    {
+        'name':'Pablo',
+        'company': 'Google',
+        'email' : 'PabloGoogleano@google.com',
+        'position': 'Software engineer',
+    },
+    {
+        'name':'Richard',
+        'company': 'Chibchombia',
+        'email' : 'richardd@chibchombia.com',
+        'position': 'data engineer',
+    }
+]
 
 
 def create_client(client_name):
