@@ -1,7 +1,13 @@
 import sys
-
+import csv
+import os
+import os.path
+from pathlib import Path
+from typing import Dict
 
 #clients = 'pablo,ricardo,'
+
+"""
 clients = [
     {
         'name':'Pablo',
@@ -16,7 +22,38 @@ clients = [
         'position': 'data engineer',
     }
 ]
+"""
 
+#print(os.path.dirname(os.path.abspath(__file__)))
+
+CLIENT_TABLE ='.clients.csv'  #Asi llamamo s un archivo oculto
+CLIENT_SCHEMA = ['name', 'company', 'email', 'position']
+clients = []
+
+creado = os.path.exists(CLIENT_TABLE)
+
+def _initialize_clients_from_storage():
+
+    if creado == False:
+        return 
+
+    with open(CLIENT_TABLE, mode='r') as f:
+        reader = csv.DictReader(f, fieldnames= CLIENT_SCHEMA)
+
+        for row in reader :
+            clients.append (row)
+    print(clients)
+
+def _save_clients_to_storage():
+    tmp_table_name = '{}.tmp'.format(CLIENT_TABLE)
+    with open(tmp_table_name, mode='w') as f:
+        writer = csv.DictWriter(f, fieldnames = CLIENT_SCHEMA)
+        writer.writerows(clients)
+
+        f.close()
+        if creado == True:
+            os.remove(CLIENT_TABLE)
+        os.rename(tmp_table_name, CLIENT_TABLE)
 
 def create_client(client):
     global clients
@@ -105,6 +142,8 @@ def _print_welcome():
 
 
 if __name__ == '__main__':
+
+    _initialize_clients_from_storage()
     _print_welcome()
 
     command = input()
@@ -119,7 +158,7 @@ if __name__ == '__main__':
         }
         #client_name=_get_client_name()
         create_client(client)
-        list_clients()
+        #list_clients()
 
     elif command == 'L':
         list_clients()
@@ -129,7 +168,7 @@ if __name__ == '__main__':
         if len(clients) -1 >= client_id:
             Updated_client = _get_client_from_user()
             Update_client(client_id, Updated_client)
-            list_clients()
+            #list_clients()
         else:
             _not_exist()
 
@@ -137,7 +176,7 @@ if __name__ == '__main__':
     elif command == 'D':
         client_id = int(_get_client_field('id'))
         delete_client(client_id)
-        list_clients()
+        #list_clients()
 
     elif command == 'S':
         client_name = _get_client_field('name')
@@ -149,3 +188,5 @@ if __name__ == '__main__':
             print('El cliente con el nombre {} no esta en la lista de clientes'.format(client_name))
     else:
         print('Invalid command')
+
+    _save_clients_to_storage()
