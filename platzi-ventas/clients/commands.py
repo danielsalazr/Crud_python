@@ -1,4 +1,6 @@
 import click
+
+from tabulate import tabulate
 #from click import decorators
 
 from clients.services import ClientService
@@ -45,17 +47,33 @@ def list (ctx):
 
     clients_list = client_service.list_clients()
 
-    click.echo (' ID  |  NAME  |  COMPANY |  EMAIL  |  POSITION') #ponmos click.echo como sustituto a print debido a que print se comprta diferencre en casa sistema operativo
-    click.echo('*'*100)
+    #click.echo (' ID  |  NAME  |  COMPANY |  EMAIL  |  POSITION') #ponmos click.echo como sustituto a print debido a que print se comprta diferencre en casa sistema operativo
+    #click.echo('*'*100)
+
+    headers = [field.capitalize() for field in Client.schema()]
+    table = []
+
+    print()
 
     for client in clients_list:
-        click.echo('{uid}  |  {name}  |  {company}  |  {position}'.format(
+        """click.echo('{uid}  |  {name}  |  {email}  |  {company}  |  {position}'.format(
             uid = client['uid'],
             name = client['name'],
             company = client['company'],
             email = client['email'],
             position = client['position']
-        ))
+
+        
+        ))"""
+
+        table.append([client['name'],
+            client['company'],
+            client['email'],
+            client['position'],
+            client['uid']])
+
+    print(tabulate(table, headers))
+    print()
 
 @clients.command()
 @click.pass_context
