@@ -63,10 +63,11 @@ def list (ctx):
             email = client['email'],
             position = client['position']
 
-        
+
         ))"""
 
-        table.append([client['name'],
+        table.append([
+            client['name'],
             client['company'],
             client['email'],
             client['position'],
@@ -76,16 +77,51 @@ def list (ctx):
     print()
 
 @clients.command()
+@click.argument('client_uid',
+                type=str)
 @click.pass_context
-def uodate(ctx, client_uid):
-    """Update a client"""
-    pass
+def update(ctx, client_uid):
+    """Updates a single client"""
+    client_service = ClientService(ctx.obj['clients_table'])
+
+    client = [client for client in client_service.list_clients() if client['uid'] == client_uid]
+
+    if client:
+        client = _update_client_flow(Client(**client[0]))
+        client_service.update_client(client)
+
+        click.echo('Client updated')
+    else:
+        click.echo('Client not found')
 
 
+def _update_client_flow(client):
+    click.echo('Leave empty if you don\'t want to modify a value')
+
+    client.name = click.prompt('New name', type=str, default=client.name)
+    client.company = click.prompt('New company', type=str, default=client.company)
+    client.email = click.prompt('New email', type=str, default=client.email)
+    client.position = click.prompt('New position', type=str, default=client.position)
+
+    return client
+
+    
 @clients.command()
+@click.argument('client_uid', type=str)
 @click.pass_context
 def delete(ctx, client_uid):
-    """Delete a client"""
-    pass
+    """ Delete a client """
+    client_service = ClientService(ctx.obj['clients_table'])
+
+    client_list = client_service.list_clients()
+
+    client = [client for client in client_list if client['uid'] == client_uid]
+    
+    if client:
+        client_service.delete_client(client)
+
+        click.echo('Cliente deleted')
+    else:
+        click.echo('Client not found')
 
 all =  clients
